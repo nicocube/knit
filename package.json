@@ -1,0 +1,20 @@
+{
+	"name": "knit",
+	"main": "lib/knit.js"
+	"description": "Implicit injection engine for node.js (far inspiration from java Guice)."
+	"maintainers": [{
+		"name": "Nicolas Lochet",
+    	"web": "https://github.com/nicocube"
+    }],
+	"version": "0.0.1",
+	"repository" : {
+		"type" : "git",
+		"url" : "git://github.com/nicocube/knit.git"
+  	},
+  	"licenses" : [{
+  		"type" : "Apache",
+    	"url" : "http://github.com/nicocube/knit/raw/master/LICENSE-2.0.txt"
+    }],
+    "dependencies" : {},
+    "devDependencies": {}
+}

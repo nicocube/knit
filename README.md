@@ -32,26 +32,26 @@ Ok but this is longer to write than the original, what is the interest ? Here co
 	// config is chainable
 	var res = knit.config({http: fake_http}).inject(function(http,fs) {
 		...
-		return result; // inject while forward return this result
+		return result; // inject will return this result
 	});
 	
 Ok this starts to be cool but we can go further.
 
-	var _f = function f() {};
+	var _f = function f() { /* implement constructor here*/ };
 	var _g = function g() {return {universe:42};};
 	var _count = 0;
-	var _h = function h() {this.c = _count++;/*console.log('c',this.c);*/};
+	var _h = function h(a, f) { /* implement constructor here*/ };
 	
 	knit.config(function (bind) {
-		bind('a').to({single: true, shortcut: true});	// bind 'a' name to the instance of the passed object as singleton
-		bind('b').to({single: true}).is('singleton');	// same with 'b' name, the previous was the default behavior
-		bind('c').to({clone: true}).is('clone');		// bind 'c' name to clone of the given object
-		bind('d').to(_g).is('builder');					// bind 'd' name to create a new instance by running function g 
-		bind('e').to(_h).is('constructor');				// bind 'e' name to create a new instance by using h as constructor function 
-		bind(_f);										// bind 'f' name to create a new instance by using h as constructor function
-		bind(_g).is('builder');							// bind 'g' name as a builder function
-		bind(_h).is('constructor');						// bind 'h' name as a constructor
-		
+		bind('a').to({...});					// bind 'a' name to the instance of the passed object as singleton
+		bind('b').to({...}).is('singleton');	// like 'a' but with 'b' name, the previous was the default behavior
+		bind('c').to({...}).is('clone');		// bind 'c' name to clone of the given object
+		bind('d').to(_g).is('builder');			// bind 'd' name to create a new instance by running function g 
+		bind('e').to(_f).is('constructor');		// bind 'e' name to create a new instance by using h as constructor function 
+		bind(_f);								// like 'e' but with 'f' name retrieved from function definition
+		bind(_g).is('builder');					// bind 'g' name as a builder function
+		bind(_h).is('constructor');				// like 'f' but with 'h' name, the previous was the default behavior.
+		                       					// h parameter will themself be injected throught knit 
 	});
 	
 	knit.inject(function(a, b, c, d, e, f, g, h) {

@@ -58,7 +58,7 @@
 		var _b = function b() {};
 		var _c = function c() {return _z;};
 		var _d = function d() {this.c = _count++;/*console.log('c',this.c);*/};
-		var _e = function e() {this.c = _count++;/*console.log('c',this.c);*/};
+		var _e = function e(w,x) {this.c = _count++; this.w = w; this.x = x; /*console.log('c',this.c);*/};
 		knit.config(function (bind) {
 			bind('w').to({});
 			bind('x').to({}).is('singleton');
@@ -129,6 +129,8 @@
 			test.notStrictEqual(e, _e);
 			test.equal(_f.c, 4);
 			test.equal(e.c, 5);
+			test.equal(e.w, _w);
+			test.equal(e.x, _x);
 		},true);
 		test.done();
 	});

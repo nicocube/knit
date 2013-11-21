@@ -1,18 +1,23 @@
 {
-  "author": "Nicolas Lochet",
-  "name": "knit",
-  "description": "Implicit injection engine for node.js (far inspiration from java Guice).",
-  "version": "0.0.2",
-  "homepage": "https://github.com/nicocube/knit",
-  "repository": {
+    "author": "Nicolas Lochet",
+    "name": "knit",
+    "description": "Implicit injection engine for node.js (far inspiration from java Guice).",
+    "version": "0.0.2",
+    "homepage": "https://github.com/nicocube/knit",
+    "repository": {
     "type": "git",
-    "url": "git://github.com/nicocube/knit.git"
-  },
-  "main": "lib/knit.js",
-  "engines": {
-    "node": "~0.6.11"
-  },
-  "dependencies": {},
-  "devDependencies": {},
-  "optionalDependencies": {}
+        "url": "git://github.com/nicocube/knit.git"
+    },
+    "main": "lib/knit.js",
+    "scripts": {
+        "test": "node_modules/nodeunit"
+    }
+    "engines": {
+        "node": "*"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "nodeunit" : "*"
+    },
+    "optionalDependencies": {}
 }

@@ -10,8 +10,8 @@
     },
     "main": "lib/knit.js",
     "scripts": {
-        "test": "node_modules/nodeunit"
-    }
+        "test": "node_modules/nodeunit/bin/nodeunit test/"
+    },
     "engines": {
         "node": "*"
     },

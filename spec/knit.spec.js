@@ -15,7 +15,7 @@
 function independent_require(cb) {
     return function () {        
         var place = __dirname+'/../lib/knit.js'
-        console.log(place)
+        //console.log(place)
         var knit = require(place)
         cb(knit)
         //console.log(require.cache[place].exports === knit)
@@ -24,14 +24,44 @@ function independent_require(cb) {
     }
 }
 
-describe("Knit in context", function() {
-    it("Defining complete config and inject", independent_require(function(knit) {
-        knit(function (x) {
-            expect(x.x).toEqual("local and no deps")
+/*
+describe("Knit in context:", function() {
+    it("Basic no config - should find node core module", independent_require(function(knit) {
+        var run = false
+        knit(function (fs) {
+            expect(fs).toEqual(require('fs'))
+            run = true
         })
+        expect(run).toEqual(true)
     }))
     
-    it("Defining complete config and inject", independent_require(function(knit) {
+    it("Basic no config - should find local npm module", independent_require(function(knit) {
+        var run = false
+        knit({jasmine:'jasmine-node'}, function (jasmine) {
+            expect(x.x).toEqual("local and no deps")
+            run = true
+        })
+        expect(run).toEqual(true)
+    }))
+    
+    it("Basic no config - should find local in caller folder script", independent_require(function(knit) {
+        var run = false
+        knit(function (x) {
+            expect(x.x).toEqual("local and no deps")
+            run = true
+        })
+        expect(run).toEqual(true)
+    }))
+    
+    it("Basic no config - should find local in caller sub folder script", independent_require(function(knit) {
+        knit(function (y) {
+            expect(y.y).toEqual("local and no deps")
+            run = true
+        })
+        expect(run).toEqual(true)
+    }))
+    
+    it("Complete config and injection", independent_require(function(knit) {
         
         knit([
             "../test-mock/a/",
@@ -46,6 +76,8 @@ describe("Knit in context", function() {
             {plouf: function(foo, bar) { return {foo:foo, bar:bar}}}
         ])
         
+        var run = false
+         
         knit(function (x,a,b,foo, bar, plop, plip, plouf) {
             expect(x.x).toEqual("local and no deps")
             
@@ -79,6 +111,11 @@ describe("Knit in context", function() {
             expect(plouf.foo.common).toEqual(foo.common)
             expect(plouf.bar).toEqual(bar)
             expect(plouf.bar.bar).toEqual(0)
+            
+            run = true
         })
+        
+        expect(run).toEqual(true)
     }))
 })
+//*/

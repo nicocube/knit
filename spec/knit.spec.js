@@ -24,8 +24,7 @@ function independent_require(cb) {
     }
 }
 
-/*
-describe("Knit in context:", function() {
+xdescribe("Knit in context:", function() {
     it("Basic no config - should find node core module", independent_require(function(knit) {
         var run = false
         knit(function (fs) {
@@ -118,4 +117,3 @@ describe("Knit in context:", function() {
         expect(run).toEqual(true)
     }))
 })
-//*/

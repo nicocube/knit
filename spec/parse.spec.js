@@ -14,35 +14,60 @@ var knit = require(__dirname+'/../lib/knit.js')
 describe("Parse single config:", function() {
     it("Should parse string resolving a script", function() {
         var r = knit.parse("../test-mock/b/foo.js")
-        expect(r).toEqual({
-            k: 'foo',
-            $: 'prototype',
-            $req: "../test-mock/b/foo.js"
-        })
+        expect(r.k).toEqual('foo')
+        expect(r.$).toEqual('$prototype')
+        expect(r._.toString()).toEqual(function() {
+    return {foo:c++, common:"same"}
+}.toString())
     })
     it("Should parse string resolving a folder", function() {
         var r = knit.parse("../test-mock/a/")
-        expect(r).toEqual([
-            { k: 'a', $: 'prototype', $req: "../test-mock/a/a.js" },
-            { k: 'b', $: 'prototype', $req: "../test-mock/a/b.js" }
-        ])
+        expect(r.length).toEqual(2)
+        expect(r[0].k).toEqual('a')
+        expect(r[0].$).toEqual('$prototype')
+        expect(r[0]._.toString()).toEqual(function() {
+    return {a:"local and no deps", c:c++}
+}.toString())
+        expect(r[1].k).toEqual('b')
+        expect(r[1].$).toEqual('$prototype')
+        expect(r[1]._.toString()).toEqual(function(a) {
+    return {b: "mine",a:a}
+}.toString())
     })
     
-    it("Should parse an object prototype definition", function() {
+    it("Should parse an object implicit prototype definition", function() {
         var r = knit.parse({foo:"../test-mock/b/bar.js"})
-        expect(r).toEqual({
-            k: 'foo',
-            $: 'prototype',
-            $req: "../test-mock/b/bar.js"
-        })
+        expect(r.k).toEqual('foo')
+        expect(r.$).toEqual('$prototype')
+        expect(r._.toString()).toEqual(function(foo) {
+    return {bar:c++, foo:foo, common:"same"}
+}.toString())
     })
     
-    it("Should parse an object static definition", function() {
-        var r = knit.parse({bar:"../test-mock/b/foo.js"})
+    it("Should parse an object implicit definition to $", function() {
+        var r = knit.parse({$:"../test-mock/b/bar.js"})
+        expect(r.k).toEqual('$')
+        expect(r.$).toEqual('$prototype')
+        expect(r._.toString()).toEqual(function(foo) {
+    return {bar:c++, foo:foo, common:"same"}
+}.toString())
+    })
+    
+    it("Should parse an object explicit prototype definition", function() {
+        var r = knit.parse({foo:"../test-mock/b/bar.js", $:'$prototype'})
+        expect(r.k).toEqual('foo')
+        expect(r.$).toEqual('$prototype')
+        expect(r._.toString()).toEqual(function(foo) {
+    return {bar:c++, foo:foo, common:"same"}
+}.toString())
+    })
+    
+    xit("Should parse an object explicit unique definition", function() {
+        var r = knit.parse({bar:"../test-mock/b/foo.js", $:'$unique'})
         expect(r).toEqual({
             k: 'bar',
-            $: 'unique',
-            $req: "../test-mock/b/foo.js"
+            $: '$unique',
+            _: {foo:0, common:"same"}
         })
     })
 })

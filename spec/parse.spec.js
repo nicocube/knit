@@ -21,8 +21,23 @@ describe("Parse single config:", function() {
 }.toString())
     })
     
-    it("Should parse string resolving a folder", function() {
+    it("Should parse string resolving a folder ending by /", function() {
         var r = knit.parse("../test-mock/a/")
+        expect(r.length).toEqual(2)
+        expect(r[0].k).toEqual('a')
+        expect(r[0].$).toEqual('$prototype')
+        expect(r[0]._.toString()).toEqual(function() {
+    return {a:"local and no deps", c:c++}
+}.toString())
+        expect(r[1].k).toEqual('b')
+        expect(r[1].$).toEqual('$prototype')
+        expect(r[1]._.toString()).toEqual(function(a) {
+    return {b: "mine",a:a}
+}.toString())
+    })
+    
+    it("Should parse string resolving a folder not ending by /", function() {
+        var r = knit.parse("../test-mock/a")
         expect(r.length).toEqual(2)
         expect(r[0].k).toEqual('a')
         expect(r[0].$).toEqual('$prototype')
@@ -43,7 +58,7 @@ describe("Parse single config:", function() {
     it("Should fail parsing a string definition with not existing folder", function() {
         expect(function() { knit.parse("../test-mock/c/") }).toThrow()
     })
-    
+
     it("Should parse string resolving a module", function() {
         var r = knit.parse('fs')
         expect(r.k).toEqual('fs')

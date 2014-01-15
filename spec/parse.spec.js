@@ -23,7 +23,7 @@ describe("Parse single config:", function() {
     
     it("Should parse string resolving a folder ending by /", function() {
         var r = knit.parse("../test-mock/a/")
-        expect(r.length).toEqual(2)
+        expect(r.length).toEqual(3)
         expect(r[0].k).toEqual('a')
         expect(r[0].$).toEqual('$prototype')
         expect(r[0]._.toString()).toEqual(function() {
@@ -33,12 +33,17 @@ describe("Parse single config:", function() {
         expect(r[1].$).toEqual('$prototype')
         expect(r[1]._.toString()).toEqual(function(a) {
     return {b: "mine",a:a}
+}.toString())
+        expect(r[2].k).toEqual('c')
+        expect(r[2].$).toEqual('$prototype')
+        expect(r[2]._.toString()).toEqual(function() {
+    return {x:"local and no deps", c:c++}
 }.toString())
     })
     
     it("Should parse string resolving a folder not ending by /", function() {
         var r = knit.parse("../test-mock/a")
-        expect(r.length).toEqual(2)
+        expect(r.length).toEqual(3)
         expect(r[0].k).toEqual('a')
         expect(r[0].$).toEqual('$prototype')
         expect(r[0]._.toString()).toEqual(function() {
@@ -48,6 +53,11 @@ describe("Parse single config:", function() {
         expect(r[1].$).toEqual('$prototype')
         expect(r[1]._.toString()).toEqual(function(a) {
     return {b: "mine",a:a}
+}.toString())
+        expect(r[2].k).toEqual('c')
+        expect(r[2].$).toEqual('$prototype')
+        expect(r[2]._.toString()).toEqual(function() {
+    return {x:"local and no deps", c:c++}
 }.toString())
     })
     

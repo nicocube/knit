@@ -107,7 +107,7 @@ describe("Parse single config:", function() {
 }.toString())
     })
     
-    xit("Should fail parsing an object explicit prototype definition with not existing file", function() {
+    it("Should fail parsing an object explicit prototype definition with not existing file", function() {
         expect(function() { 
             knit.parse({foo:"../test-mock/b/paf.js", $:'$prototype'})
         }).toThrow()
@@ -121,4 +121,41 @@ describe("Parse single config:", function() {
             _: {foo:0, common:"same"}
         })
     })
+    
+    it("Should parse an array of simple definition", function() {
+        var r = knit.parse(["../test-mock/b/foo.js", "../test-mock/a/", {bar:"../test-mock/b/foo.js", $:'$prototype'}])
+        console.log(r)
+        expect(r.length).toEqual(5)
+        var i =0
+        expect(r[i].k).toEqual('foo')
+        expect(r[i].$).toEqual('$prototype')
+        expect(r[i]._.toString()).toEqual(function() {
+    return {foo:c++, common:"same"}
+}.toString())
+        i++
+        expect(r[i].k).toEqual('a')
+        expect(r[i].$).toEqual('$prototype')
+        expect(r[i]._.toString()).toEqual(function() {
+    return {a:"local and no deps", c:c++}
+}.toString())
+        i++
+        expect(r[i].k).toEqual('b')
+        expect(r[i].$).toEqual('$prototype')
+        expect(r[i]._.toString()).toEqual(function(a) {
+    return {b: "mine",a:a}
+}.toString())
+        i++
+        expect(r[i].k).toEqual('c')
+        expect(r[i].$).toEqual('$prototype')
+        expect(r[i]._.toString()).toEqual(function() {
+    return {x:"local and no deps", c:c++}
+}.toString())
+        i++
+        expect(r[i].k).toEqual('bar')
+        expect(r[i].$).toEqual('$prototype')
+        expect(r[i]._.toString()).toEqual(function() {
+    return {foo:c++, common:"same"}
+}.toString())
+    })
+    
 })

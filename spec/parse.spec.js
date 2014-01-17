@@ -124,9 +124,8 @@ describe("Parse single config:", function() {
     
     it("Should parse an array of simple definition", function() {
         var r = knit.parse(["../test-mock/b/foo.js", "../test-mock/a/", {bar:"../test-mock/b/foo.js", $:'$prototype'}])
-        console.log(r)
         expect(r.length).toEqual(5)
-        var i =0
+        var i = 0
         expect(r[i].k).toEqual('foo')
         expect(r[i].$).toEqual('$prototype')
         expect(r[i]._.toString()).toEqual(function() {
@@ -158,4 +157,9 @@ describe("Parse single config:", function() {
 }.toString())
     })
     
+    it("Should fail parsing an array containing a function not àt the last element", function() {
+        expect(function() { 
+            knit.parse([function(){}, 'plop'])
+        }).toThrow()
+    })
 })

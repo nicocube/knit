@@ -122,6 +122,33 @@ describe("Parse single config:", function() {
         })
     })
     
+    xit("Should parse an object with immediate object binding", function() {
+        var r = knit.parse({bar:{foo:0, common:"same"}})
+        expect(r).toEqual({
+            k: 'bar',
+            $: '$unique',
+            _: {foo:0, common:"same"}
+        })
+    })
+    
+    xit("Should parse an object with immediate function binding", function() {
+        var r = knit.parse({bar:function(foo) {
+    return {foo:foo, common:"same"}
+}})
+        expect(r.k).toEqual('bar')
+        expect(r.$).toEqual('$prototype')
+        expect(r._.toString()).toEqual(function(foo) {
+    return {foo:foo, common:"same"}
+}.toString())
+    })
+    
+    xit("Should parse an object with immediate string binding", function() {
+        var r = knit.parse({bar:"barbar", $:'='})
+        expect(r.k).toEqual('bar')
+        expect(r.$).toEqual('$unique')
+        expect(r._).toEqual("barbar")
+    })
+    
     it("Should parse an array of simple definition", function() {
         var r = knit.parse(["../test-mock/b/foo.js", "../test-mock/a/", {bar:"../test-mock/b/foo.js", $:'$prototype'}])
         expect(r.length).toEqual(5)
@@ -159,7 +186,7 @@ describe("Parse single config:", function() {
     
     it("Should fail parsing an array containing a function not àt the last element", function() {
         expect(function() { 
-            knit.parse([function(){}, 'plop'])
+            knit.parse(['foo',function(){}, 'plop'])
         }).toThrow()
     })
 })

@@ -63,11 +63,12 @@ describe("Parse object config:", function() {
     
     it("Should bind explicit unique definition", function() {
         var r = knit.parse({bar:"../test-mock/b/foo.js", $:'$unique'})
-        expect(r).toEqual({
-            k: 'bar',
-            $: '$unique',
-            _: {foo:0, common:"same"}
-        })
+        expect(r.k).toEqual('bar')
+        expect(r.$).toEqual('$unique')
+        expect(r._.toString()).toEqual(function() { return knit(r) }.toString())
+        expect(r._.r.toString()).toEqual(function() {
+    return {foo:c++, common:"same"}
+}.toString())
     })
     
     it("Should bind with immediate object binding", function() {

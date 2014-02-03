@@ -80,6 +80,36 @@ describe("Parse object config:", function() {
         })
     })
     
+    it("Should bind with immediate object binding and short explicit scope definition", function() {
+        var r = knit.parse({bar:{foo:0, common:"same"}, $:'='})
+        expect(r).toEqual({
+            k: 'bar',
+            $: '$unique',
+            _: {foo:0, common:"same"}
+        })
+    })
+    
+    it("Should bind with immediate object binding and long explicit scope definition", function() {
+        var r = knit.parse({bar:{foo:0, common:"same"}, $:'$unique'})
+        expect(r).toEqual({
+            k: 'bar',
+            $: '$unique',
+            _: {foo:0, common:"same"}
+        })
+    })
+    
+    it("Should bind with immediate object binding and short explicit scope definition", function() {
+        expect(function() { 
+            knit.parse({bar:{foo:0, common:"same"}, $:'@'})
+        }).toThrow()
+    })
+    
+    it("Should bind with immediate object binding and long explicit scope definition", function() {
+        expect(function() { 
+            knit.parse({bar:{foo:0, common:"same"}, $:'$prototype'})
+        }).toThrow()
+    })
+    
     it("Should bind with immediate function binding", function() {
         var r = knit.parse({bar:function(foo) {
     return {foo:foo, common:"same"}
@@ -89,6 +119,13 @@ describe("Parse object config:", function() {
         expect(r._.toString()).toEqual(function(foo) {
     return {foo:foo, common:"same"}
 }.toString())
+    })
+    
+    it("Should bind with immediate string binding implicit definition", function() {
+        var r = knit.parse({bar:"barbar"})
+        expect(r.k).toEqual('bar')
+        expect(r.$).toEqual('$unique')
+        expect(r._).toEqual("barbar")
     })
     
     it("Should bind with immediate string binding long definition", function() {
@@ -103,5 +140,17 @@ describe("Parse object config:", function() {
         expect(r.k).toEqual('bar')
         expect(r.$).toEqual('$unique')
         expect(r._).toEqual("barbar")
+    })
+    
+    it("Should fail binding with immediate string for prototype long definition", function() {
+        expect(function() {
+            knit.parse({bar:"barbar", $:'$prototype'})
+        }).toThrow()
+    })
+    
+    it("Should fail binding with immediate string for prototype short definition", function() {
+        expect(function() {
+            knit.parse({bar:"barbar", $:'@'})
+        }).toThrow()
     })
 })

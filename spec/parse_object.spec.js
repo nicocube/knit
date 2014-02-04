@@ -142,6 +142,19 @@ describe("Parse object config:", function() {
         expect(r._).toEqual("barbar")
     })
     
+    it("Should bind with immediate string containing escaped '/' binding explicit definition", function() {
+        var r = knit.parse({bar:"barbar / conan", $:'='})
+        expect(r.k).toEqual('bar')
+        expect(r.$).toEqual('$unique')
+        expect(r._).toEqual("barbar / conan")
+    })
+    
+    it("Should fail binding with immediate string containing escaped '/' binding implicit definition", function() {
+        expect(function() {
+            knit.parse({bar:"barbar / conan"})
+        }).toThrow()
+    })
+    
     it("Should fail binding with immediate string for prototype long definition", function() {
         expect(function() {
             knit.parse({bar:"barbar", $:'$prototype'})

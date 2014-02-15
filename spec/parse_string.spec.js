@@ -12,6 +12,15 @@
 var knit = require(__dirname+'/../lib/knit.js')
 
 describe("Parse string config:", function() {
+    it("Should resolve an implicitly colocated script", function() {
+        var r = knit.parse("x")
+        expect(r.k).toEqual('x')
+        expect(r.$).toEqual('$prototype')
+        expect(r._.toString()).toEqual(function() {
+    return {x:"local and no deps", c:c++}
+}.toString())
+    })
+
     it("Should resolve a file", function() {
         var r = knit.parse("../test-mock/b/foo.js")
         expect(r.k).toEqual('foo')

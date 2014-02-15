@@ -110,17 +110,6 @@ describe("Parse object config:", function() {
         }).toThrow()
     })
     
-    it("Should bind with immediate function binding", function() {
-        var r = knit.parse({bar:function(foo) {
-    return {foo:foo, common:"same"}
-}})
-        expect(r.k).toEqual('bar')
-        expect(r.$).toEqual('$prototype')
-        expect(r._.toString()).toEqual(function(foo) {
-    return {foo:foo, common:"same"}
-}.toString())
-    })
-    
     it("Should bind with immediate string binding implicit definition", function() {
         var r = knit.parse({bar:"barbar"})
         expect(r.k).toEqual('bar')
@@ -165,5 +154,39 @@ describe("Parse object config:", function() {
         expect(function() {
             knit.parse({bar:"barbar", $:'@'})
         }).toThrow()
+    })
+    
+    it("Should bind with immediate function binding implicit definition", function() {
+        var r = knit.parse({bar:function(foo) {
+    return {foo:foo, common:"same"}
+}})
+        expect(r.k).toEqual('bar')
+        expect(r.$).toEqual('$prototype')
+        expect(r._.toString()).toEqual(function(foo) {
+    return {foo:foo, common:"same"}
+}.toString())
+    })
+    
+    it("Should bind with immediate function binding explicit prototype definition", function() {
+        var r = knit.parse({$:'$prototype',bar:function(foo) {
+    return {foo:foo, common:"same"}
+}})
+        expect(r.k).toEqual('bar')
+        expect(r.$).toEqual('$prototype')
+        expect(r._.toString()).toEqual(function(foo) {
+    return {foo:foo, common:"same"}
+}.toString())
+    })
+    
+    it("Should bind with immediate function binding explicit prototype definition", function() {
+        var r = knit.parse({$:'$unique',bar:function(foo) {
+    return {foo:foo, common:"same"}
+}})
+        expect(r.k).toEqual('bar')
+        expect(r.$).toEqual('$unique')
+        expect(r._.toString()).toEqual(function() { return knit(r) }.toString())
+        expect(r._.r.toString()).toEqual(function(foo) {
+    return {foo:foo, common:"same"}
+}.toString())
     })
 })

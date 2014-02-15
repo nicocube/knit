@@ -23,9 +23,34 @@ function independent_require(cb) {
         //console.log(require.cache[place] === undefined)
     }
 }
-
-xdescribe("Knit in context:", function() {
-    it("Basic no config - should find node core module", independent_require(function(knit) {
+    
+describe("Knit in context:", function() {
+    it("should return empty config", independent_require(function(knit) {
+        var run = false
+        var config = knit()
+        expect(config).toEqual({})
+    }))
+    
+    it("should return config", independent_require(function(knit) {
+        knit(
+            {jasmine:'jasmine-node'}, 
+            {foo: "../test-mock/b/foo.js"}
+        )
+        var config = knit()
+        expect(typeof config).toEqual("object")
+        
+        expect(config.jasmine.k).toEqual('jasmine')
+        expect(config.jasmine.$).toEqual('$unique')
+        expect(config.jasmine._).toEqual(require('jasmine-node'))
+        
+        expect(config.foo.k).toEqual('foo')
+        expect(config.foo.$).toEqual('$prototype')
+        expect(config.foo._.toString()).toEqual(function() {
+    return {foo:c++, common:"same"}
+}.toString())
+    }))
+    
+    it("should find node core module", independent_require(function(knit) {
         var run = false
         knit(function (fs) {
             expect(fs).toEqual(require('fs'))
@@ -34,16 +59,17 @@ xdescribe("Knit in context:", function() {
         expect(run).toEqual(true)
     }))
     
-    it("Basic no config - should find local npm module", independent_require(function(knit) {
+    it("should find local npm module", independent_require(function(knit) {
         var run = false
-        knit({jasmine:'jasmine-node'}, function (jasmine) {
-            expect(x.x).toEqual("local and no deps")
+        knit({jasmine:'jasmine-node'})
+        knit(function (jasmine) {
+            expect(jasmine).toEqual(require('jasmine-node'))
             run = true
         })
         expect(run).toEqual(true)
     }))
     
-    it("Basic no config - should find local in caller folder script", independent_require(function(knit) {
+    it("should find local in caller folder script", independent_require(function(knit) {
         var run = false
         knit(function (x) {
             expect(x.x).toEqual("local and no deps")
@@ -52,9 +78,10 @@ xdescribe("Knit in context:", function() {
         expect(run).toEqual(true)
     }))
     
-    it("Basic no config - should find local in caller sub folder script", independent_require(function(knit) {
+    it("should find local in caller sub folder script", independent_require(function(knit) {
+        var run = false
         knit(function (y) {
-            expect(y.y).toEqual("local and no deps")
+            expect(y.x.x).toEqual("local and no deps")
             run = true
         })
         expect(run).toEqual(true)
@@ -62,7 +89,7 @@ xdescribe("Knit in context:", function() {
     
     it("Complete config and injection", independent_require(function(knit) {
         
-        knit([
+        knit(
             "../test-mock/a/",
             {foo: "../test-mock/b/foo.js"},
             {bar: "../test-mock/b/bar.js", $:'unique'},
@@ -73,7 +100,7 @@ xdescribe("Knit in context:", function() {
                 {a: function () {return {a:42}}}
             ]},
             {plouf: function(foo, bar) { return {foo:foo, bar:bar}}}
-        ])
+        )
         
         var run = false
          

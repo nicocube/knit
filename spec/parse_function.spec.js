@@ -11,13 +11,17 @@
 
 var knit = require(__dirname+'/../lib/knit.js')
 
-describe("Utilities: ", function() {
-    describe("flatten : ", function() {
-        it("flatten 2 dimension", function() {
-            var i = [1, [1, 2], 3]
-            var a = i.reduce(knit.util.flatten, [])
-            var e = [1, 1, 2, 3]
-            expect(a).toEqual(e)
-        })
+describe("Parse function config:", function() {
+    it("", function () {
+        var r = knit.parse(function plop () {})
+        expect(r.k).toEqual('plop')
+        expect(r.$).toEqual('$prototype')
+        expect(r._.toString()).toEqual(function plop () {}.toString())
+    })
+    
+    it("should fail if ", function () {
+        expect(function() { 
+            knit.parse(function(){})
+        }).toThrow()
     })
 })

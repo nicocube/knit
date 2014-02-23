@@ -23,7 +23,7 @@ function independent_require(cb) {
         //console.log(require.cache[place] === undefined)
     }
 }
-    
+
 describe("Knit in context:", function() {
     it("should return empty config", independent_require(function(knit) {
         var run = false
@@ -87,23 +87,27 @@ describe("Knit in context:", function() {
         expect(run).toEqual(true)
     }))
     
+})
+
+describe("Knit in context:", function() {
     it("Complete config and injection", independent_require(function(knit) {
         
         knit(
             "../test-mock/a/",
             {foo: "../test-mock/b/foo.js"},
-            {bar: "../test-mock/b/bar.js", $:'unique'},
-            {plop: "../test-mock/b/plop.js", $:'unique', _:[
+            {bar: "../test-mock/b/bar.js", $:'='},
+            {plop: "../test-mock/b/plop.js", $:'=', _:[
                 {a: "../test-mock/b/no_a.js"}
             ]},
-            {plip: "../test-mock/b/plop.js", scope:'unique', dependencies:[
-                {a: function () {return {a:42}}}
+            {plip: "../test-mock/b/plop.js", $scope:'$unique', _:[
+                {a: function() {return {a:42}}}
             ]},
-            {plouf: function(foo, bar) { return {foo:foo, bar:bar}}}
+            {plouf: function(foo, bar) { return {foo:foo, bar:bar}}, $:'='},
+            function plaf(plouf){ return plouf }
         )
         
         var run = false
-         
+        
         knit(function (x,a,b,foo, bar, plop, plip, plouf) {
             expect(x.x).toEqual("local and no deps")
             
@@ -115,12 +119,12 @@ describe("Knit in context:", function() {
             expect(b.a.c).toEqual(1)
             expect(b.a.a).toEqual(a.a)
             
-            expect(foo.foo).not.toEqual(0)
-            expect(foo.common).not.toEqual("same")
+            expect(foo.foo).toEqual(0)
+            expect(foo.common).toEqual("same")
             
-            expect(bar.bar).not.toEqual(0)
+            expect(bar.bar).toEqual(0)
             expect(bar.foo).not.toEqual(foo)
-            expect(bar.foo.foo).not.toEqual(1)
+            expect(bar.foo.foo).toEqual(1)
             expect(bar.foo.common).toEqual(foo.common)
             
             expect(plop.plop).toEqual("plip")

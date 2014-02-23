@@ -189,4 +189,17 @@ describe("Parse object config:", function() {
     return {foo:foo, common:"same"}
 }.toString())
     })
+
+    it("Should bind $unique with explicit dependencies definition", function() {
+        var r = knit.parse({plop: "../test-mock/b/plop.js", $:'=', _:[
+            {a: "../test-mock/b/no_a.js"}
+        ]})
+        expect(r.k).toEqual('plop')
+        expect(r.$).toEqual('$unique')
+        expect(r._.toString()).toEqual(function() { return kn.knit(r) }.toString())
+        expect(r._.r.toString()).toEqual(function(a) {
+    return {plop: "plip",a:a}
+}.toString())
+        expect(r._.knit.cfg.a._.toString()).toEqual(require("../test-mock/b/no_a.js").toString())
+    })
 })

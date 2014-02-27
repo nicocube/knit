@@ -73,3 +73,7 @@ And then run unit test on it :
 Short term: Build more doc and examples. Create new apps and framework with it.
 
 Long term: Think about porting knit.js in the browser context.
+
+[npm-url]: https://npmjs.org/package/knit
+[npm-image]: https://badge.fury.io/js/knit.png
+

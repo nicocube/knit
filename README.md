@@ -1,4 +1,4 @@
-# Knit.js
+# Knit.js [![NPM version][npm-image]][npm-url]
 
 ## Why ?
 

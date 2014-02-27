@@ -33,11 +33,14 @@ Become :
 	
 Ok but this is longer to write than the original, what is the interest ? Here come the fun part, you can now configure your knit to choose your implementation.
 	
+	var knit = require('knit')
 	var fake_http = {
 		... // mock your module for test purpose for eg.
 	};
 	
-	var res = knit({http: fake_http},function(http,fs) {
+	knit({http: fake_http})
+	
+	var res = knit(function(http,fs) {
 		...
 		return result; // inject will return this result
 	});
@@ -55,18 +58,19 @@ And then run unit test on it :
 
 ./spec/foo.spec.js
 
-    require(knit)(
+    var knit = require(knit)
+    knit(
         './lib/foo.js', // will be automatically binded to 'foo' parametter by script name
         {http: { /* some mock implementation here */ } },
-        {fs: { /* some mock implementation here */ } },
-        function (foo) {            
-            describe("...", function() {
-                it("...",function() {
-                    // some test on mocked foo here
-                })
-            })
-        }
+        {fs: { /* some mock implementation here */ } }
     )
+    knit(function (foo) {            
+		describe("...", function() {
+			it("...",function() {
+				// some test on mocked foo here
+			})
+		})
+    })
 	
 ## Next ?
 

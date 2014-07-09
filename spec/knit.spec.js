@@ -28,7 +28,7 @@ describe("Knit in context:", function() {
     it("should return empty config", independent_require(function(knit) {
         var run = false
         var config = knit()
-        expect(config).toEqual({})
+        expect(config).toEqual({knit : { k : 'knit', $ : '$asis', _ : knit }})
     }))
     
     it("should return config", independent_require(function(knit) {
@@ -87,9 +87,6 @@ describe("Knit in context:", function() {
         expect(run).toEqual(true)
     }))
     
-})
-
-describe("Knit in context:", function() {
     it("Complete config and injection", independent_require(function(knit) {
         
         knit(
@@ -147,4 +144,18 @@ describe("Knit in context:", function() {
         
         expect(run).toEqual(true)
     }))
+})
+
+describe("Self injection:", function() {
+    it("should auto inject", independent_require(function(knit) {
+        var run = false
+        var kn = knit
+        
+        knit(function (knit) {
+            expect(knit).toEqual(kn)
+            run = true
+        })
+        expect(run).toEqual(true)
+    }))
+
 })

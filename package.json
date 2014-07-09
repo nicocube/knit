@@ -2,7 +2,7 @@
     "author": "Nicolas Lochet",
     "name": "knit",
     "description": "Implicit injection engine for node.js (inspiration from AngularJS and Guice)",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "homepage": "https://github.com/nicocube/knit",
     "repository": {
     "type": "git",
@@ -14,11 +14,11 @@
         "start": "node_modules/jasmine-node/bin/jasmine-node --autotest --watch lib/ --test-dir spec/"
     },
     "engines": {
-        "node": "*"
+        "node": "0.10.*"
     },
     "dependencies": {},
     "devDependencies": {
-        "jasmine-node": "*"
+        "jasmine-node": "1.11.*"
     },
     "optionalDependencies": {}
 }

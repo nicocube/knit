@@ -135,6 +135,7 @@ describe("Knit in context:", function() {
             expect(plip.a.a).toEqual(42)
             
             expect(plouf.foo).not.toEqual(foo)
+            expect(plouf.foo.foo).toEqual(2)
             expect(plouf.foo.common).toEqual(foo.common)
             expect(plouf.bar).toEqual(bar)
             expect(plouf.bar.bar).toEqual(0)
@@ -157,5 +158,38 @@ describe("Self injection:", function() {
         })
         expect(run).toEqual(true)
     }))
-
+    
+    it("should work with auto injected knit", independent_require(function(K) {
+        var run = false
+        K(function (knit) {
+            knit(
+                "../test-mock/a/",
+                {foo: "../test-mock/b/foo.js"},
+                {bar: "../test-mock/b/bar.js", $:'='}
+            )
+            
+            knit(function (x,a,b,foo, bar, plop, plip, plouf) {
+                expect(x.x).toEqual("local and no deps")
+                
+                expect(a.a).toEqual("local and no deps")
+                expect(a.c).toEqual(2)
+                
+                expect(b.b).toEqual("mine")
+                expect(b.a).not.toEqual(a)
+                expect(b.a.c).toEqual(3)
+                expect(b.a.a).toEqual(a.a)
+                
+                expect(foo.foo).toEqual(3)
+                expect(foo.common).toEqual("same")
+                
+                expect(bar.bar).toEqual(1)
+                expect(bar.foo).not.toEqual(foo)
+                expect(bar.foo.foo).toEqual(4)
+                expect(bar.foo.common).toEqual(foo.common)
+                
+                run = true
+            })
+        })
+        expect(run).toEqual(true)
+    }))
 })

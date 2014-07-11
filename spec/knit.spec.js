@@ -69,6 +69,16 @@ describe("Knit in context:", function() {
         expect(run).toEqual(true)
     }))
     
+    it("should find another local npm module", independent_require(function(knit) {
+        var run = false
+        knit({cookieParser:'cookie-parser', $:'='})
+        knit(function (cookieParser) {
+            expect(cookieParser).toEqual(require('cookie-parser'))
+            run = true
+        })
+        expect(run).toEqual(true)
+    }))
+    
     it("should find local in caller folder script", independent_require(function(knit) {
         var run = false
         knit(function (x) {
@@ -92,14 +102,14 @@ describe("Knit in context:", function() {
         knit(
             "../test-mock/a/",
             {foo: "../test-mock/b/foo.js"},
-            {bar: "../test-mock/b/bar.js", $:'='},
-            {plop: "../test-mock/b/plop.js", $:'=', _:[
+            {bar: "../test-mock/b/bar.js", $:'!'},
+            {plop: "../test-mock/b/plop.js", $:'!', _:[
                 {a: "../test-mock/b/no_a.js"}
             ]},
             {plip: "../test-mock/b/plop.js", $scope:'$unique', _:[
                 {a: function() {return {a:42}}}
             ]},
-            {plouf: function(foo, bar) { return {foo:foo, bar:bar}}, $:'='},
+            {plouf: function(foo, bar) { return {foo:foo, bar:bar}}, $:'!'},
             function plaf(plouf){ return plouf }
         )
         
@@ -165,7 +175,7 @@ describe("Self injection:", function() {
             knit(
                 "../test-mock/a/",
                 {foo: "../test-mock/b/foo.js"},
-                {bar: "../test-mock/b/bar.js", $:'='}
+                {bar: "../test-mock/b/bar.js", $:'!'}
             )
             
             knit(function (x,a,b,foo, bar, plop, plip, plouf) {

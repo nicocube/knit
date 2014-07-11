@@ -81,7 +81,7 @@ describe("Parse object config:", function() {
     })
     
     it("Should bind with immediate object binding and short explicit scope definition", function() {
-        var r = knit.parse({bar:{foo:0, common:"same"}, $:'='})
+        var r = knit.parse({bar:{foo:0, common:"same"}, $:'!'})
         expect(r).toEqual({
             k: 'bar',
             $: '$unique',
@@ -125,14 +125,14 @@ describe("Parse object config:", function() {
     })
     
     it("Should bind with immediate string binding short definition", function() {
-        var r = knit.parse({bar:"barbar", $:'='})
+        var r = knit.parse({bar:"barbar", $:'!'})
         expect(r.k).toEqual('bar')
         expect(r.$).toEqual('$unique')
         expect(r._).toEqual("barbar")
     })
     
     it("Should bind with immediate string containing escaped '/' binding explicit definition", function() {
-        var r = knit.parse({bar:"barbar / conan", $:'='})
+        var r = knit.parse({bar:"barbar / conan", $:'!'})
         expect(r.k).toEqual('bar')
         expect(r.$).toEqual('$unique')
         expect(r._).toEqual("barbar / conan")
@@ -191,7 +191,7 @@ describe("Parse object config:", function() {
     })
 
     it("Should bind $unique with explicit dependencies definition", function() {
-        var r = knit.parse({plop: "../test-mock/b/plop.js", $:'=', _:[
+        var r = knit.parse({plop: "../test-mock/b/plop.js", $:'!', _:[
             {a: "../test-mock/b/no_a.js"}
         ]})
         expect(r.k).toEqual('plop')

@@ -31,7 +31,7 @@ Become :
 		...
 	})
 	
-Ok but this is longer to write than the original, what is the interest ? Here come the fun part, you can now configure your knit to choose your implementation.
+Ok we dried the code a little but this is almost as long to write than the original. What is the interest ? Here come the fun part, you can now configure your knit to choose your implementation.
 	
 	var knit = require('knit')
 	var fake_http = {
@@ -58,9 +58,9 @@ And then run unit test on it :
 
 ./spec/foo.spec.js
 
-    var knit = require(knit)
+    var knit = require('knit')
     knit(
-        './lib/foo.js', // will be automatically binded to 'foo' parametter by script name
+        '../lib/foo.js', // will be automatically binded to 'foo' parametter by reading script name
         {http: { /* some mock implementation here */ } },
         {fs: { /* some mock implementation here */ } }
     )
@@ -71,7 +71,94 @@ And then run unit test on it :
 			})
 		})
     })
-	
+
+## Auto-inject
+
+Knit auto-inject itself so you can write the following :
+
+    require('knit')(function(knit) {
+        knit('./lib/foo.js')
+        knit(function (foo) {
+            ...
+        })
+    })
+
+This can look silly but it can be a useful pattern.
+
+## Implicit lookup
+
+One powerful feature of knit is that it will automagically search the current folder for a script even if it's not previously defined.
+
+So if you still have your foo.js dependency in `./lib/foo.js` and you write the following `./app.js` script :
+    
+    require('knit')(function (foo) {
+        ...
+    })
+
+Then knit will see an implicit declaration of foo, scan the local folder and sub folder, find `./lib/foo.js`, and load it !
+
+The rule followed by knit for implicit declaration is :
+1. search first for a node module corresponding the parametter name using the classic node `require` fonction (ex: `knit(function(foo) {...` does `require('foo')` first)
+2. if no module found then scan the local folder depth-first for a *.js* file corresponding to the parametter name (ex: `knit(function(foo) {...` leads to `./lib/foo.js`)
+
+NB: the scan of the local folder exclude the node_modules folder (this is node restricted area).
+
+
+## Scope
+
+Knit proposes 4 kinds of scope to inject elements:
+1. prototype : the element is new with each injection.
+2. unique : the element is unique, the same one will be injected in every situation (singleton done right).
+3. as is : the element is to be injected as it is given by definition.
+4. require as is : the element is to be required then injected as it is exported by the module.
+
+For **prototype** scope the element definition must be a function or a module that exports a function. This function will be *knitted* (meaning called with knit to provide parametters through injection) each time we need a new instance. Implicitly any definition that is a function is seen as **prototype**. As for now an object cannot be used as a prototype definition.
+
+The **unique** scope defines a unique object. It can be defined as a named object, as a module that export an object, or as a function that will be *knitted* and injected once when defined explicitly, or when first injected implicitly. Implicitly any definition that is an object is seen as **unique**.
+
+For **as is** scope, the definition is taken as it is, even if it is a function, and injected as is. The **as is** scope definition is useful to define function on the spot, string and especially path because the default behavior of knit is to scan paths.
+
+**Require as is** scope is a variant of **as is** scope for imported module, the module or script is required first, and then stored and injected as is.
+
+## Explicit definitions
+
+Definition can be a string, a function with a name, or an object following certain rule.
+
+* string : it can be a module name, a script name, a path to a script or a path to a folder to scan.
+* function with a name : the name will be used as reference name for future injection and the function will be knitted in prototype scope.
+* object : follows these rules :
+  1. if it is an Array, all his elements will be parsed as independent definition
+  2. otherwise it must have one and only one arbitrary key representing the wanted injection name
+  3. the value can be any type
+  4. the $ or $scope key can be used to define the scope with the following values :
+    * '$prototype' or '@' for **prototype** scope
+    * '$unique' or '!' for **unique** scope
+    * '$asis' or '=' for **as is** scope
+    * '$require' or '&' for **require as is** scope
+
+    knit(
+        'fs', // load fs node standard module explicitly (doubtfully usefull but works)
+        'express', // load express module from node_modules explicitly (also doubtfully usefull but works)
+        'foo', // load foo explicitly with a recursive scan of local folder
+        './lib/bar.js', // load bar from ./lib/bar.js
+        './other_lib', // load every script from ./other_lib folder (use at your own risks)
+        
+        function booya(foo) { ...; return ...}, // register booya as a function that will be injected foo to build an instance, implicitly in $prototype scope
+        
+        {fizzBuzz: './lib/fizz-buzz.js'}, // load fizz-buzz.js script and bind it to fizzBuzz for future injection (scope is implicit)
+        
+        {passportGoogle: 'passport-google'}, // load passport-google module in unique scope and bind it to passportGoogle for future injection (scope is implicit)
+        
+        {cookieParser: 'cookie-parser', $:'&'}, // load cookie-parser module in 'require as is' scope, short definition
+        
+        {myfun: function(a, b) {...}, $:'='}
+        
+        {basedir: __dirname, $:'='}, // register basedir as the string that represent the name of the folder of the current script using __dirname variable, with $asis scope short form definition (to avoid a wild scan of current folder for a basedir script)
+        
+        {router: function(express) { return express.Router() }, $:'!'}, // define a function builder for parametter name router that will be injected express to provide a express.Router instance, in $unique scope short form definition
+        {routerWithOptions: function(express, router_options) { return express.Router(router_options) }, $:'$unique'}, // define a function builder for parametter name routerWithOptions that will be injected express and router_options to provide a express.Router instance, in $unique scope long form definition
+    )
+
 ## Next ?
 
 Short term: Build more doc and examples. Create new apps and framework with it.

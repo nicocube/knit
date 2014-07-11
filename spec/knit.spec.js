@@ -71,7 +71,7 @@ describe("Knit in context:", function() {
     
     it("should find another local npm module", independent_require(function(knit) {
         var run = false
-        knit({cookieParser:'cookie-parser', $:'='})
+        knit({cookieParser:'cookie-parser', $:'&'})
         knit(function (cookieParser) {
             expect(cookieParser).toEqual(require('cookie-parser'))
             run = true

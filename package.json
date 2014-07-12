@@ -2,7 +2,7 @@
     "author": "Nicolas Lochet",
     "name": "knit",
     "description": "Implicit injection engine for node.js (inspiration from AngularJS and Guice)",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "homepage": "https://github.com/nicocube/knit",
     "repository": {
     "type": "git",

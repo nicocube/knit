@@ -13,8 +13,9 @@
 * strategy to load, test, and clean cache
 */
 function independent_require(cb) {
-    return function () {        
-        var place = __dirname+'/../lib/knit.js'
+    return function () {
+        var path = require("path")    
+        var place = path.resolve(__dirname,'../lib/knit.js')
         //console.log(place)
         var knit = require(place)
         cb(knit)
@@ -155,9 +156,7 @@ describe("Knit in context:", function() {
         
         expect(run).toEqual(true)
     }))
-})
 
-describe("Self injection:", function() {
     it("should auto inject", independent_require(function(knit) {
         var run = false
         var kn = knit
@@ -178,7 +177,7 @@ describe("Self injection:", function() {
                 {bar: "../test-mock/b/bar.js", $:'!'}
             )
             
-            knit(function (x,a,b,foo, bar, plop, plip, plouf) {
+            knit(function (x,a,b,foo, bar) {
                 expect(x.x).toEqual("local and no deps")
                 
                 expect(a.a).toEqual("local and no deps")
@@ -200,6 +199,41 @@ describe("Self injection:", function() {
                 run = true
             })
         })
+        expect(run).toEqual(true)
+    }))
+
+})
+
+describe("scan Path", function() {
+    it("should fail to find module not in scan path, explicit declaration", independent_require(function(knit) {
+        expect(function() { 
+            knit(
+                {__knit_path:['../test-mock']},
+                '../spec/x.js'
+            )
+        }).toThrow()
+    }))
+
+    it("should fail to find module not in scan path, implicit declaration", independent_require(function(knit) {
+        expect(function() { 
+            knit(
+                {__knit_path:['../test-mock']}
+            )        
+            knit(function (x) {
+            })
+        }).toThrow()
+    }))
+    
+    it("should accept module found in scan path", independent_require(function(knit) {
+        var run = false
+        knit(
+            {__knit_path:['../test-mock']}
+        )
+        knit(function (a) {
+            expect(a.a).toEqual("local and no deps")
+            expect(a.c).toEqual(4)
+            run = true
+        })        
         expect(run).toEqual(true)
     }))
 })

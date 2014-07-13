@@ -236,4 +236,20 @@ describe("Knit in context:", function() {
         })        
         expect(run).toEqual(true)
     }))
+    
+    it("should inject unique function producing function once and only once", independent_require(function(knit) {
+        var run = 0
+        knit(
+            {toto : function() {
+                return function() {throw new Error("This error should not be thrown")}
+            }, $: '!'}
+        )
+        knit(function (toto) {
+            run++
+        })
+        knit(function (toto) {
+            run++
+        })
+        expect(run).toEqual(2)
+    }))
 })

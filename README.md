@@ -98,8 +98,8 @@ So if you still have your foo.js dependency in `./lib/foo.js` and you write the 
 Then knit will see an implicit declaration of foo, scan the local folder and sub folder, find `./lib/foo.js`, and load it !
 
 The rule followed by knit for implicit declaration is :
-1. search first for a node module corresponding the parametter name using the classic node `require` fonction (ex: `knit(function(foo) {...` does `require('foo')` first)
-2. if no module found then scan the local folder depth-first for a *.js* file corresponding to the parametter name (ex: `knit(function(foo) {...` leads to `./lib/foo.js`)
+  1. search first for a node module corresponding the parametter name using the classic node `require` fonction (ex: `knit(function(foo) {...` does `require('foo')` first)
+  2. if no module found then scan the local folder depth-first for a *.js* file corresponding to the parametter name (ex: `knit(function(foo) {...` leads to `./lib/foo.js`)
 
 NB: the scan of the local folder exclude the node_modules folder (this is node restricted area).
 
@@ -136,6 +136,7 @@ Definition can be a string, a function with a name, or an object following certa
     * '$unique' or '!' for **unique** scope
     * '$asis' or '=' for **as is** scope
     * '$require' or '&' for **require as is** scope
+
 
     knit(
         'fs', // load fs node standard module explicitly (doubtfully usefull but works)

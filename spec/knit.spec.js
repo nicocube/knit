@@ -104,19 +104,20 @@ describe("Knit in context:", function() {
             "../test-mock/a/",
             {foo: "../test-mock/b/foo.js"},
             {bar: "../test-mock/b/bar.js", $:'!'},
-            {plop: "../test-mock/b/plop.js", $:'!', _:[
+            {plop: "../test-mock/b/plop.js", $:'!', $$:[
                 {a: "../test-mock/b/no_a.js"}
             ]},
-            {plip: "../test-mock/b/plop.js", $scope:'$unique', _:[
+            {plip: "../test-mock/b/plop.js", $scope:'$unique', $$:[
                 {a: function() {return {a:42}}}
             ]},
             {plouf: function(foo, bar) { return {foo:foo, bar:bar}}, $:'!'},
-            function plaf(plouf){ return plouf }
+            function plaf(plouf){ return plouf },
+            {_:'morgan',$:'&'}
         )
         
         var run = false
         
-        knit(function (x,a,b,foo, bar, plop, plip, plouf) {
+        knit(function (x,a,b,foo, bar, plop, plip, plouf, morgan) {
             expect(x.x).toEqual("local and no deps")
             
             expect(a.a).toEqual("local and no deps")
@@ -150,6 +151,8 @@ describe("Knit in context:", function() {
             expect(plouf.foo.common).toEqual(foo.common)
             expect(plouf.bar).toEqual(bar)
             expect(plouf.bar.bar).toEqual(0)
+            
+            expect(morgan).toEqual(require('morgan'))
             
             run = true
         })
@@ -202,9 +205,6 @@ describe("Knit in context:", function() {
         expect(run).toEqual(true)
     }))
 
-})
-
-describe("scan Path", function() {
     it("should fail to find module not in scan path, explicit declaration", independent_require(function(knit) {
         expect(function() { 
             knit(

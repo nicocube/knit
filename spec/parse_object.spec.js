@@ -191,7 +191,7 @@ describe("Parse object config:", function() {
     })
 
     it("Should bind $unique with explicit dependencies definition", function() {
-        var r = knit.parse({plop: "../test-mock/b/plop.js", $:'!', _:[
+        var r = knit.parse({plop: "../test-mock/b/plop.js", $:'!', $$:[
             {a: "../test-mock/b/no_a.js"}
         ]})
         expect(r.k).toEqual('plop')

@@ -130,7 +130,7 @@ Definition can be a string, a function with a name, or an object following certa
   1. if it is an Array, all his elements will be parsed as independent definition
   2. otherwise it must have one and only one arbitrary key representing the wanted injection name
   3. the value associated with the key can be any type
-  3. the $$ key can be used in place of an arbitrary key to define a name that is the same as its value 
+  3. the _ key can be used in place of an arbitrary key to define a name that is the same as its value 
   4. the $ or $scope key can be used to define the scope with the following values :
     * '$prototype' or '@' for **prototype** scope
     * '$unique' or '!' for **unique** scope
@@ -154,7 +154,7 @@ Example :
         
         {cookieParser: 'cookie-parser', $:'&'}, // load cookie-parser module in 'require as is' scope, short definition
         
-        {$$: 'morgan', $:'&'}, // load morgan module in 'require as is' scope, short definition, use $$ form in place of {morgan: 'morgan', $:'&'}, because it is drier
+        {_: 'morgan', $:'&'}, // load morgan module in 'require as is' scope, short definition, use $$ form in place of {morgan: 'morgan', $:'&'}, because it is drier
         
         {myfun: function(a, b) {...}, $:'='}
         

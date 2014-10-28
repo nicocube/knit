@@ -11,7 +11,7 @@
     "main": "lib/knit.js",
     "scripts": {
         "test": "node_modules/jasmine-node/bin/jasmine-node spec/",
-        "start": "node_modules/jasmine-node/bin/jasmine-node --autotest --watch lib/ --test-dir spec/"
+        "autotest": "node_modules/jasmine-node/bin/jasmine-node --autotest --watch lib/ --test-dir spec/"
     },
     "engines": {
         "node": "0.10.*"

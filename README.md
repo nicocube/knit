@@ -22,66 +22,78 @@ The idea of Knit, is to use function parameters name to retrieve matching depend
 
 For example :
 
-	var fs = require('fs');
-	var http = require('http');
+```javascript
+var fs = require('fs');
+var http = require('http');
+```
 	
 Become :
 
-	require('knit')(function(http, fs) {
-		...
-	})
+```javascript
+require('knit')(function(http, fs) {
+    ...
+})
+```
 	
 Ok we dried the code a little but this is almost as long to write than the original. What is the interest ? Here come the fun part, you can now configure your knit to choose your implementation.
-	
-	var knit = require('knit')
-	var fake_http = {
-		... // mock your module for test purpose for eg.
-	};
-	
-	knit({http: fake_http})
-	
-	var res = knit(function(http,fs) {
-		...
-		return result; // inject will return this result
-	});
+
+```javascript
+var knit = require('knit')
+var fake_http = {
+    ... // mock your module for test purpose for eg.
+};
+
+knit({http: fake_http})
+
+var res = knit(function(http,fs) {
+    ...
+    return result; // inject will return this result
+});
+```
 	
 Ok this starts to be cool but we can go further. Let's use it as a module definition :
 
 ./lib/foo.js
 
+```javascript
     module.exports = function (http,fs) {
 		...
 		return result; // inject will return this result
 	});
+```
     
 And then run unit test on it :
 
 ./spec/foo.spec.js
 
-    var knit = require('knit')
-    knit(
-        '../lib/foo.js', // will be automatically binded to 'foo' parametter by reading script name
-        {http: { /* some mock implementation here */ } },
-        {fs: { /* some mock implementation here */ } }
-    )
-    knit(function (foo) {            
-		describe("...", function() {
-			it("...",function() {
-				// some test on mocked foo here
-			})
-		})
+```javascript
+var knit = require('knit')
+knit(
+    '../lib/foo.js', // will be automatically binded to 'foo' parametter by reading script name
+    {http: { /* some mock implementation here */ } },
+    {fs: { /* some mock implementation here */ } }
+)
+knit(function (foo) {            
+    describe("...", function() {
+        it("...",function() {
+            // some test on mocked foo here
+        })
     })
+})
+```
 
 ## Auto-inject
 
 Knit auto-inject itself so you can write the following :
 
-    require('knit')(function(knit) {
-        knit('./lib/foo.js')
-        knit(function (foo) {
-            ...
-        })
+```javascript
+require('knit')(function(knit) {
+    knit('./lib/foo.js')
+    knit(function (foo) {
+        ...
     })
+})
+```
 
 This can look silly but it can be a useful pattern.
 
@@ -90,10 +102,12 @@ This can look silly but it can be a useful pattern.
 One powerful feature of knit is that it will automagically search the current folder for a script even if it's not previously defined.
 
 So if you still have your foo.js dependency in `./lib/foo.js` and you write the following `./app.js` script :
-    
-    require('knit')(function (foo) {
-        ...
-    })
+
+```javascript
+require('knit')(function (foo) {
+    ...
+})
+```
 
 Then knit will see an implicit declaration of foo, scan the local folder and sub folder, find `./lib/foo.js`, and load it !
 
@@ -139,30 +153,32 @@ Definition can be a string, a function with a name, or an object following certa
 
 Example :
 
-    knit(
-        'fs', // load fs node standard module explicitly (doubtfully usefull but works)
-        'express', // load express module from node_modules explicitly (also doubtfully usefull but works)
-        'foo', // load foo explicitly with a recursive scan of local folder
-        './lib/bar.js', // load bar from ./lib/bar.js
-        './other_lib', // load every script from ./other_lib folder (use at your own risks)
-        
-        function booya(foo) { ...; return ...}, // register booya as a function that will be injected foo to build an instance, implicitly in $prototype scope
-        
-        {fizzBuzz: './lib/fizz-buzz.js'}, // load fizz-buzz.js script and bind it to fizzBuzz for future injection (scope is implicit)
-        
-        {passportGoogle: 'passport-google'}, // load passport-google module in unique scope and bind it to passportGoogle for future injection (scope is implicit)
-        
-        {cookieParser: 'cookie-parser', $:'&'}, // load cookie-parser module in 'require as is' scope, short definition
-        
-        {_: 'morgan', $:'&'}, // load morgan module in 'require as is' scope, short definition, use $$ form in place of {morgan: 'morgan', $:'&'}, because it is drier
-        
-        {myfun: function(a, b) {...}, $:'='}
-        
-        {basedir: __dirname, $:'='}, // register basedir as the string that represent the name of the folder of the current script using __dirname variable, with $asis scope short form definition (to avoid a wild scan of current folder for a basedir script)
-        
-        {router: function(express) { return express.Router() }, $:'!'}, // define a function builder for parametter name router that will be injected express to provide a express.Router instance, in $unique scope short form definition
-        {routerWithOptions: function(express, router_options) { return express.Router(router_options) }, $:'$unique'}, // define a function builder for parametter name routerWithOptions that will be injected express and router_options to provide a express.Router instance, in $unique scope long form definition
-    )
+```javascript
+knit(
+    'fs', // load fs node standard module explicitly (doubtfully usefull but works)
+    'express', // load express module from node_modules explicitly (also doubtfully usefull but works)
+    'foo', // load foo explicitly with a recursive scan of local folder
+    './lib/bar.js', // load bar from ./lib/bar.js
+    './other_lib', // load every script from ./other_lib folder (use at your own risks)
+    
+    function booya(foo) { ...; return ...}, // register booya as a function that will be injected foo to build an instance, implicitly in $prototype scope
+    
+    {fizzBuzz: './lib/fizz-buzz.js'}, // load fizz-buzz.js script and bind it to fizzBuzz for future injection (scope is implicit)
+    
+    {passportGoogle: 'passport-google'}, // load passport-google module in unique scope and bind it to passportGoogle for future injection (scope is implicit)
+    
+    {cookieParser: 'cookie-parser', $:'&'}, // load cookie-parser module in 'require as is' scope, short definition
+    
+    {_: 'morgan', $:'&'}, // load morgan module in 'require as is' scope, short definition, use $$ form in place of {morgan: 'morgan', $:'&'}, because it is drier
+    
+    {myfun: function(a, b) {...}, $:'='}
+    
+    {basedir: __dirname, $:'='}, // register basedir as the string that represent the name of the folder of the current script using __dirname variable, with $asis scope short form definition (to avoid a wild scan of current folder for a basedir script)
+    
+    {router: function(express) { return express.Router() }, $:'!'}, // define a function builder for parametter name router that will be injected express to provide a express.Router instance, in $unique scope short form definition
+    {routerWithOptions: function(express, router_options) { return express.Router(router_options) }, $:'$unique'}, // define a function builder for parametter name routerWithOptions that will be injected express and router_options to provide a express.Router instance, in $unique scope long form definition
+)
+```
 
 ## Next ?
 

@@ -126,9 +126,9 @@ Knit proposes 4 kinds of scope to inject elements:
   3. as is : the element is to be injected as it is given by definition.
   4. require as is : the element is to be required then injected as it is exported by the module.
 
-For **prototype** scope the element definition must be a function or a module that exports a function. This function will be *knitted* (meaning called with knit to provide parametters through injection) each time we need a new instance. Implicitly any definition that is a function is seen as **prototype**. As for now an object cannot be used as a prototype definition.
+For **prototype** scope the element definition must be a function or a module that exports a function. This function will be *knitted* (meaning called with knit to provide parametters through injection) each time we need a new instance. Implicitly any definition that is an anonymous function is seen as **prototype**. As for now an object cannot be used as a prototype definition.
 
-The **unique** scope defines a unique object. It can be defined as a named object, as a module that export an object, or as a function that will be *knitted* and injected once when defined explicitly, or when first injected implicitly. Implicitly any definition that is an object is seen as **unique**.
+The **unique** scope defines a unique object. It can be defined as a named object, as a module that export an object, or as a function that will be *knitted* and injected once when defined explicitly, or when first injected implicitly. Implicitly any definition that is an object, or a named function whose name match the requested key, is seen as **unique**.
 
 For **as is** scope, the definition is taken as it is, even if it is a function, and injected as is. The **as is** scope definition is useful to define function on the spot, string and especially path because the default behavior of knit is to scan paths.
 

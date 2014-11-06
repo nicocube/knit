@@ -15,7 +15,7 @@ describe("Parse function config:", function() {
     it("", function () {
         var r = knit.parse(function plop () {})
         expect(r.k).toEqual('plop')
-        expect(r.$).toEqual('$prototype')
+        expect(r.$).toEqual('$unique')
         expect(r._.toString()).toEqual(function plop () {}.toString())
     })
     

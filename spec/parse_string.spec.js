@@ -78,11 +78,37 @@ describe("Parse string config:", function() {
         expect(function() { knit.parse("../test-mock/c/") }).toThrow()
     })
 
-    it("Should parse string resolving a module", function() {
+    it("Should parse string resolving a module that provide an object as unique", function() {
         var r = knit.parse('fs')
         expect(r.k).toEqual('fs')
         expect(r.$).toEqual('$unique')
         expect(r._).toEqual(require('fs'))
+    })
+
+    it("Should parse string resolving a file that provide a named function whose name match file name as unique", function() {
+        var r = knit.parse("../test-mock/b/buz.js")
+        expect(r.k).toEqual('buz')
+        expect(r.$).toEqual('$unique')
+        expect(r._.toString()).toEqual(function buz() {
+    return {}
+}.toString())
+    })
+
+    it("Should parse string resolving a file that provide a named function whose name match file name as prototype", function() {
+        var r = knit.parse("../test-mock/b/blam.js")
+        expect(r.k).toEqual('blam')
+        expect(r.$).toEqual('$prototype')
+        expect(r._.toString()).toEqual(function paf() {
+    return {}
+}.toString())
+    })
+
+
+    it("Should parse string resolving a module that provide a function as unique", function() {
+        var r = knit.parse('ve')
+        expect(r.k).toEqual('ve')
+        expect(r.$).toEqual('$unique')
+        expect(r._).toEqual(require('ve'))
     })
     
     it("Should fail parsing a string definition with not existing module", function() {

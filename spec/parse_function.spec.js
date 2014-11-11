@@ -12,10 +12,10 @@
 var knit = require(__dirname+'/../lib/knit.js')
 
 describe("Parse function config:", function() {
-    it("", function () {
+    it("should parse a named function as require scope", function () {
         var r = knit.parse(function plop () {})
         expect(r.k).toEqual('plop')
-        expect(r.$).toEqual('$unique')
+        expect(r.$).toEqual('$require')
         expect(r._.toString()).toEqual(function plop () {}.toString())
     })
     

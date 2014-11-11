@@ -88,7 +88,7 @@ describe("Parse string config:", function() {
     it("Should parse string resolving a file that provide a named function whose name match file name as unique", function() {
         var r = knit.parse("../test-mock/b/buz.js")
         expect(r.k).toEqual('buz')
-        expect(r.$).toEqual('$unique')
+        expect(r.$).toEqual('$require')
         expect(r._.toString()).toEqual(function buz() {
     return {}
 }.toString())
@@ -107,7 +107,7 @@ describe("Parse string config:", function() {
     it("Should parse string resolving a module that provide a function as unique", function() {
         var r = knit.parse('ve')
         expect(r.k).toEqual('ve')
-        expect(r.$).toEqual('$unique')
+        expect(r.$).toEqual('$require')
         expect(r._).toEqual(require('ve'))
     })
     

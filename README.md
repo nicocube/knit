@@ -173,12 +173,25 @@ knit(
     
     {myfun: function(a, b) {...}, $:'='}
     
-    {basedir: __dirname, $:'='}, // register basedir as the string that represent the name of the folder of the current script using __dirname variable, with $asis scope short form definition (to avoid a wild scan of current folder for a basedir script)
+    {basedir: __dirname, $:'='}, // register basedir as the string that represent the name of the folder of the current script using __dirname variable, with $asis scope short form definition (to avoid a wild scan of current folder to find a basedir script)
     
     {router: function(express) { return express.Router() }, $:'!'}, // define a function builder for parametter name router that will be injected express to provide a express.Router instance, in $unique scope short form definition
     {routerWithOptions: function(express, router_options) { return express.Router(router_options) }, $:'$unique'}, // define a function builder for parametter name routerWithOptions that will be injected express and router_options to provide a express.Router instance, in $unique scope long form definition
 )
 ```
+
+## Other useful definition
+
+Knit permit to define a root folder to start scan from.
+
+```javascript
+knit(
+    {__knit_path:['./lib']},
+)
+```
+
+This permit to prevent knit to scan from other folder than the defined one. This is useful to separate script for the backend and frontend part of a dev.
+
 
 ## Next ?
 

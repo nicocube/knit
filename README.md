@@ -121,10 +121,10 @@ NB: the scan of the local folder exclude the node_modules folder (this is node r
 ## Scope
 
 Knit proposes 4 kinds of scope to inject elements:
-  1. prototype : the element is new with each injection.
-  2. unique : the element is unique, the same one will be injected in every situation (singleton done right).
-  3. as is : the element is to be injected as it is given by definition.
-  4. require as is : the element is to be required then injected as it is exported by the module.
+  1. **prototype** : the element is new with each injection.
+  2. **unique** : the element is unique, the same one will be injected in every situation (singleton done right).
+  3. **as is** : the element is to be injected as it is given by definition.
+  4. **require as is** : the element is to be required then injected as it is exported by the module.
 
 For **prototype** scope the element definition must be a function or a module that exports a function. This function will be *knitted* (meaning called with knit to provide parametters through injection) each time we need a new instance. Implicitly any definition that is an anonymous function is seen as **prototype**. As for now an object cannot be used as a prototype definition.
 
@@ -138,9 +138,9 @@ For **as is** scope, the definition is taken as it is, even if it is a function,
 
 Definition can be a string, a function with a name, or an object following certain rule.
 
-* string : it can be a module name, a script name, a path to a script or a path to a folder to scan.
-* function with a name : the name will be used as reference name for future injection and the function will be knitted in prototype scope.
-* object : follows these rules :
+* **string** : it can be a module name, a script name, a path to a script or a path to a folder to scan.
+* **function with a name** : the name will be used as reference name for future injection and the function will be knitted in require as is scope.
+* **object** : follows these rules :
   1. if it is an Array, all his elements will be parsed as independent definition
   2. otherwise it must have one and only one arbitrary key representing the wanted injection name
   3. the value associated with the key can be any type

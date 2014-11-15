@@ -98,13 +98,13 @@ describe("Parse object config:", function() {
         })
     })
     
-    it("Should bind with immediate object binding and short explicit scope definition", function() {
+    it("Should fail binding immediate object as prototype and short explicit scope definition", function() {
         expect(function() { 
             knit.parse({bar:{foo:0, common:"same"}, $:'@'})
         }).toThrow()
     })
     
-    it("Should bind with immediate object binding and long explicit scope definition", function() {
+    it("Should fail binding immediate object as prototype and long explicit scope definition", function() {
         expect(function() { 
             knit.parse({bar:{foo:0, common:"same"}, $:'$prototype'})
         }).toThrow()

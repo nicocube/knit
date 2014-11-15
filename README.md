@@ -141,17 +141,18 @@ Definition can be a string, a function with a name, or an object following certa
 * **string** : it can be a module name, a script name, a path to a script or a path to a folder to scan.
 * **function with a name** : the name will be used as reference name for future injection and the function will be knitted in require as is scope.
 * **object** : follows these rules :
-  1. if it is an Array, all his elements will be parsed as independent definition
+  1. if it is an Array (array is an object), all his elements will be parsed as independent definition
   2. otherwise it must have one and only one arbitrary key representing the wanted injection name
   3. the value associated with the key can be any type
-  3. the _ key can be used in place of an arbitrary key to define a name that is the same as its value 
-  4. the $ or $scope key can be used to define the scope with the following values :
+  3. the `_` key can be used in place of an arbitrary key to define a name that is the same as its value 
+  4. the `$` or `$scope` key can be used to define the scope with the following values :
     * '$prototype' or '@' for **prototype** scope
     * '$unique' or '!' for **unique** scope
     * '$asis' or '=' for **as is** scope
     * '$require' or '&' for **require as is** scope
+  5. the `$$` or `$dependendies` key with an array value containing a list of dependencies of the module. The dependencies defined in this array locally replace any global definition. 
 
-Example :
+Examples :
 
 ```javascript
 knit(
@@ -161,7 +162,7 @@ knit(
     './lib/bar.js', // load bar from ./lib/bar.js
     './other_lib', // load every script from ./other_lib folder (use at your own risks)
     
-    function booya(foo) { ...; return ...}, // register booya as a function that will be injected foo to build an instance, implicitly in $prototype scope
+    function booya(foo) { ...; return ...}, // register booya as a function that will be injected foo to build an instance, implicitly in $require scope
     
     {fizzBuzz: './lib/fizz-buzz.js'}, // load fizz-buzz.js script and bind it to fizzBuzz for future injection (scope is implicit)
     
@@ -177,6 +178,12 @@ knit(
     
     {router: function(express) { return express.Router() }, $:'!'}, // define a function builder for parametter name router that will be injected express to provide a express.Router instance, in $unique scope short form definition
     {routerWithOptions: function(express, router_options) { return express.Router(router_options) }, $:'$unique'}, // define a function builder for parametter name routerWithOptions that will be injected express and router_options to provide a express.Router instance, in $unique scope long form definition
+
+    {plop1: "plop.js", $:'!', $$:[ {a: "a1.js"} ]}, // create a unique instance plop1 from script plop.js injecting dependecy a requiring module a1.js 
+    
+    {plop2: "plop.js", $:'!', $$:[ {a: "a2.js"} ]}, // create a unique instance plop2 from script plop.js injecting dependecy a requiring module a2.js
+    
+    ...
 )
 ```
 

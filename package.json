@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "homepage": "https://github.com/nicocube/knit",
     "repository": {
-    "type": "git",
+        "type": "git",
         "url": "git://github.com/nicocube/knit.git"
     },
     "main": "lib/knit.js",

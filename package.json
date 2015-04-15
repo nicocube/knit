@@ -10,8 +10,9 @@
     },
     "main": "lib/knit.js",
     "scripts": {
-        "test": "node_modules/jasmine-node/bin/jasmine-node spec/",
-        "autotest": "node_modules/jasmine-node/bin/jasmine-node --autotest --watch lib/ --test-dir spec/"
+        "test": "jasmine-node spec/",
+        "autotest": "jasmine-node --autotest --watch lib/ --test-dir spec/",
+        "coverage": "istanbul cover jasmine-node spec/"
     },
     "engines": {
         "node": "0.10.*"
@@ -19,6 +20,7 @@
     "dependencies": {},
     "devDependencies": {
         "jasmine-node": "1.11.*",
+        "istanbul": "~0.3.11",
         "morgan" : "1.0.1",
         "cookie-parser" : "1.0.1",
         "ve" : "0.1.*"

@@ -1,4 +1,8 @@
 .git*
 spec
 test*
+<<<<<<< HEAD
 examples*
+=======
+coverage/
+>>>>>>> c5992e6bfe5cef494a80e0a11d7c412307038716

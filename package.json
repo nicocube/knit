@@ -19,11 +19,11 @@
     },
     "dependencies": {},
     "devDependencies": {
-        "jasmine-node": "1.11.*",
-        "istanbul": "~0.3.11",
-        "morgan" : "1.0.1",
-        "cookie-parser" : "1.0.1",
-        "ve" : "0.1.*"
+        "cookie-parser": "^1.4.4",
+        "istanbul": "^0.4.5",
+        "jasmine-node": "^3.0.0",
+        "morgan": "^1.9.1",
+        "ve": "0.1.*"
     },
     "optionalDependencies": {}
 }

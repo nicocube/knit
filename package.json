@@ -17,7 +17,9 @@
     "engines": {
         "node": "0.10.*"
     },
-    "dependencies": {},
+    "dependencies": {
+        "eslint": "^6.2.2"
+    },
     "devDependencies": {
         "cookie-parser": "^1.4.4",
         "istanbul": "^0.4.5",

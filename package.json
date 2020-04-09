@@ -22,10 +22,10 @@
         "nodemon": "^2.0.2"
     },
     "devDependencies": {
-        "cookie-parser": "^1.4.4",
+        "cookie-parser": "^1.4.5",
         "istanbul": "^0.4.5",
         "jasmine-node": "^3.0.0",
-        "morgan": "^1.9.1",
+        "morgan": "^1.10.0",
         "ve": "0.1.*"
     },
     "optionalDependencies": {}

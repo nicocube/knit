@@ -18,15 +18,14 @@
         "node": "0.10.*"
     },
     "dependencies": {
-        "eslint": "^7.5.0",
-        "nodemon": "^2.0.4"
+        "eslint": "^7.32.0",
+        "nodemon": "^2.0.22"
     },
     "devDependencies": {
-        "cookie-parser": "^1.4.5",
+        "cookie-parser": "^1.4.7",
         "istanbul": "^0.4.5",
         "jasmine-node": "^3.0.0",
-        "morgan": "^1.10.0",
-        "ve": "0.1.*"
-    },
-    "optionalDependencies": {}
+        "morgan": "^1.12.1",
+        "ve": "^0.1.3"
+    }
 }

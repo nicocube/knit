@@ -19,7 +19,7 @@
     },
     "dependencies": {
         "eslint": "^7.32.0",
-        "nodemon": "^2.0.22"
+        "nodemon": "^3.1.14"
     },
     "devDependencies": {
         "cookie-parser": "^1.4.7",
